@@ -1,5 +1,6 @@
 package com.example.book.web;
 
+import com.example.book.domain.Author;
 import com.example.book.domain.Book;
 import com.example.book.exception.BookNotFoundException;
 import com.example.book.service.AuthorService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -38,10 +40,11 @@ class BookController {
     }
 
     @RequestMapping(path = "/{bookId}/authors", method = GET)
-    List<Long> getAuthorsForBook(@PathVariable Long bookId) {
+    List<Author> getAuthorsForBook(@PathVariable Long bookId) {
         return bookService.findBookByBookId(bookId)
                 .map(Book::getId)
-                .map(authorService::getAuthorIdsForBookId)
-                .orElseThrow(BookNotFoundException::new);
+                .map(authorService::findAuthorsByBookId)
+                .orElseThrow(BookNotFoundException::new)
+                .collect(Collectors.toList());
     }
 }

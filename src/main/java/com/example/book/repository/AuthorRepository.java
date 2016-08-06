@@ -1,6 +1,6 @@
 package com.example.book.repository;
 
-import com.example.book.domain.Book;
+import com.example.book.domain.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,10 +10,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    Optional<Book> findById(@Param("id") Long id);
+    Optional<Author> findById(@Param("id") Long id);
 
-    @Query("SELECT book FROM Book book INNER JOIN book.authors author WHERE author.id = :authorId")
-    Stream<Book> findBooksForAuthorId(@Param("authorId") Long authorId);
+    @Query("SELECT author FROM Author author INNER JOIN author.books book WHERE book.id = :bookId")
+    Stream<Author> findByBookId(@Param("bookId") Long bookId);
 }

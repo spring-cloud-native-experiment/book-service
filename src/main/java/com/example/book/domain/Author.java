@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Builder
-public class Book {
+public class Author {
 
     @Id
     @GeneratedValue
@@ -25,6 +25,11 @@ public class Book {
     private String name;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "books")
-    private List<Author> authors;
+    @ManyToMany
+    @JoinTable(
+            name = "Book_Author",
+            inverseJoinColumns = @JoinColumn(name = "AuthorId"),
+            joinColumns = @JoinColumn(name = "BookId")
+    )
+    private List<Book> books;
 }

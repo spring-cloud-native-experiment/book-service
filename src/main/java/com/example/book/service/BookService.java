@@ -5,9 +5,9 @@ import com.example.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class BookService {
@@ -25,5 +25,9 @@ public class BookService {
 
     public Optional<Book> findBookByBookId(Long bookId) {
         return repository.findById(bookId);
+    }
+
+    public Stream<Book> findBooksByAuthorId(Long authorId) {
+        return repository.findBooksForAuthorId(authorId);
     }
 }
