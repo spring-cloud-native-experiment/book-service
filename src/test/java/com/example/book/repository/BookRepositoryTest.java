@@ -26,7 +26,7 @@ public class BookRepositoryTest {
     private BookRepository bookRepository;
 
     @Test
-    public void findsAuthorById() throws Exception {
+    public void findsBookById() throws Exception {
         String bookName = "Java 8 Streams In Action";
         Book book = Book.builder().name(bookName).build();
         Long bookId = this.testEntityManager.persistAndGetId(book, Long.class);
@@ -39,7 +39,7 @@ public class BookRepositoryTest {
     }
 
     @Test
-    public void findAuthorByBook() throws Exception {
+    public void findBooksByAuthor() throws Exception {
         String bookName = "Java 8 Streams in Action";
         Book book = Book.builder().name(bookName).build();
         Author author = Author.builder().name("Test").books(Collections.singletonList(book)).build();
