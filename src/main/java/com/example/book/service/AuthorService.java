@@ -27,7 +27,15 @@ public class AuthorService {
         return repository.findById(authorId);
     }
 
+    public Optional<Author> findAuthorByName(String name) {
+        return repository.findByName(name);
+    }
+
     public Stream<Author> findAuthorsByBookId(Long bookId) {
         return repository.findByBookId(bookId);
+    }
+
+    public void save(Author author) {
+        repository.save(author);
     }
 }

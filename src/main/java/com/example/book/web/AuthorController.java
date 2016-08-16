@@ -2,11 +2,15 @@ package com.example.book.web;
 
 import com.example.book.domain.Author;
 import com.example.book.domain.Book;
+import com.example.book.exception.AuthorAlreadyExistsException;
 import com.example.book.exception.AuthorNotFoundException;
 import com.example.book.service.AuthorService;
 import com.example.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/authors")
@@ -46,5 +51,17 @@ class AuthorController {
                 .map(bookService::findBooksByAuthorId)
                 .orElseThrow(AuthorNotFoundException::new)
                 .collect(Collectors.toList());
+    }
+
+    @RequestMapping(path = "/author", method = POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity save(@RequestBody Author author) {
+        authorService.findAuthorByName(author.getName())
+                .ifPresent((ignore) -> {
+                    throw new AuthorAlreadyExistsException();
+                });
+
+        authorService.save(author);
+        return ResponseEntity.ok().build();
     }
 }

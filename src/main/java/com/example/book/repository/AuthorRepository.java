@@ -14,6 +14,8 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     Optional<Author> findById(@Param("id") Long id);
 
+    Optional<Author> findByName(@Param("name") String name);
+
     @Query("SELECT author FROM Author author INNER JOIN author.books book WHERE book.id = :bookId")
     Stream<Author> findByBookId(@Param("bookId") Long bookId);
 }
