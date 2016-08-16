@@ -24,12 +24,11 @@ public class Author {
     @NotNull
     private String name;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "Book_Author",
-            inverseJoinColumns = @JoinColumn(name = "AuthorId"),
-            joinColumns = @JoinColumn(name = "BookId")
-    )
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
     private List<Book> books;
+
+    @JsonIgnore
+    public List<Book> getBooks() {
+        return books;
+    }
 }

@@ -9,10 +9,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -41,8 +41,8 @@ public class BookRepositoryTest {
     @Test
     public void findBooksByAuthor() throws Exception {
         String bookName = "Java 8 Streams in Action";
-        Book book = Book.builder().name(bookName).build();
-        Author author = Author.builder().name("Test").books(Collections.singletonList(book)).build();
+        Author author = Author.builder().name("Test").build();
+        Book book = Book.builder().name(bookName).authors(singletonList(author)).build();
         Long bookId = this.testEntityManager.persistAndGetId(book, Long.class);
         this.testEntityManager.persist(author);
 

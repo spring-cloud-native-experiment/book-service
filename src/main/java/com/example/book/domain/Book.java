@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -27,7 +24,16 @@ public class Book {
     @NotNull
     private String name;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
+    @JoinTable(
+            name = "Book_Author",
+            inverseJoinColumns = @JoinColumn(name = "AuthorId"),
+            joinColumns = @JoinColumn(name = "BookId")
+    )
     private List<Author> authors;
+
+    @JsonIgnore
+    public List<Author> getAuthors() {
+        return authors;
+    }
 }

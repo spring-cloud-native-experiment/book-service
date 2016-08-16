@@ -41,8 +41,8 @@ public class AuthorRepositoryTest {
     @Test
     public void findAuthorByBook() throws Exception {
         String authorName = "Erich Gamma";
-        Book book = Book.builder().name("Test").build();
-        Author author = Author.builder().name(authorName).books(asList(book)).build();
+        Author author = Author.builder().name(authorName).build();
+        Book book = Book.builder().name("Test").authors(asList(author)).build();
         this.testEntityManager.persist(book);
         Long authorId = this.testEntityManager.persistAndGetId(author, Long.class);
 

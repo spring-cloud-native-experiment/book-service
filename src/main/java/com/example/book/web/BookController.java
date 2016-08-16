@@ -2,18 +2,23 @@ package com.example.book.web;
 
 import com.example.book.domain.Author;
 import com.example.book.domain.Book;
+import com.example.book.exception.BookAlreadyExistsException;
 import com.example.book.exception.BookNotFoundException;
 import com.example.book.service.AuthorService;
 import com.example.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/books")
@@ -45,6 +50,15 @@ class BookController {
                 .map(Book::getId)
                 .map(authorService::findAuthorsByBookId)
                 .orElseThrow(BookNotFoundException::new)
-                .collect(Collectors.toList());
+                .collect(toList());
+    }
+
+    @RequestMapping(path = "/book", method = POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity save(@RequestBody Book book) {
+
+        bookService.save(book);
+
+        return ResponseEntity.ok().build();
     }
 }
