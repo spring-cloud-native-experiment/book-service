@@ -35,9 +35,12 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	runtime('mysql:mysql-connector-java')
 	testRuntime('com.h2database:h2')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.boot:spring-boot-starter-test'){
+		exclude group: "org.assertj"
+	}
 	testCompile('org.springframework.boot:spring-boot-test-autoconfigure')
 	testCompile('org.springframework.restdocs:spring-restdocs-restassured')
+	testCompile 'org.assertj:assertj-core:3.5.2'
 }
 
 

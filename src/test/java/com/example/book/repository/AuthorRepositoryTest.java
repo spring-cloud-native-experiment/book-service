@@ -33,9 +33,10 @@ public class AuthorRepositoryTest {
 
         Optional<Author> savedAuthor = authorRepository.findById(authorId);
 
-        assertThat(savedAuthor.isPresent()).isTrue();
-        assertThat(savedAuthor.get().getId()).isEqualTo(authorId);
-        assertThat(savedAuthor.get().getName()).isEqualTo(authorName);
+        assertThat(savedAuthor).hasValueSatisfying(expected -> {
+            assertThat(expected.getId()).isEqualTo(authorId);
+            assertThat(expected.getName()).isEqualTo(authorName);
+        });
     }
 
     @Test
@@ -48,11 +49,6 @@ public class AuthorRepositoryTest {
 
         Stream<Author> savedAuthor = authorRepository.findByBookId(book.getId());
 
-        long count = savedAuthor.map(auth -> {
-            long id = auth.getId();
-            assertThat(id).isEqualTo(authorId);
-            return id;
-        }).count();
-        assertThat(count).isEqualTo(1);
+        assertThat(savedAuthor).extracting(Author::getId).contains(authorId).hasSize(1);
     }
 }
