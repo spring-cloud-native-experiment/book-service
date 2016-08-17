@@ -1,6 +1,7 @@
 package com.example.book.repository;
 
 import com.example.book.domain.Book;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
+@RefreshScope
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     Optional<Book> findById(@Param("id") Long id);
