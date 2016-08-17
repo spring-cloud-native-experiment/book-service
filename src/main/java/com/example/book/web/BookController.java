@@ -2,13 +2,11 @@ package com.example.book.web;
 
 import com.example.book.domain.Author;
 import com.example.book.domain.Book;
-import com.example.book.exception.BookAlreadyExistsException;
 import com.example.book.exception.BookNotFoundException;
 import com.example.book.service.AuthorService;
 import com.example.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,10 +53,7 @@ class BookController {
 
     @RequestMapping(path = "/book", method = POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity save(@RequestBody Book book) {
-
-        bookService.save(book);
-
-        return ResponseEntity.ok().build();
+    Book save(@RequestBody Book book) {
+        return bookService.save(book);
     }
 }

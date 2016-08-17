@@ -41,7 +41,7 @@ public class BookService {
         return repository.findBooksForAuthorId(authorId);
     }
 
-    public void save(Book book) {
+    public Book save(Book book) {
         findBookByName(book.getName())
                 .ifPresent(ignore -> {
                     throw new BookAlreadyExistsException();
@@ -57,6 +57,6 @@ public class BookService {
                 ).collect(toList());
 
         book.setAuthors(authors);
-        repository.save(book);
+        return repository.save(book);
     }
 }

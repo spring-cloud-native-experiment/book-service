@@ -1,6 +1,7 @@
 package com.example.book.service;
 
 import com.example.book.domain.Author;
+import com.example.book.exception.AuthorAlreadyExistsException;
 import com.example.book.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,11 @@ public class AuthorService {
         return repository.findByBookId(bookId);
     }
 
-    public void save(Author author) {
-        repository.save(author);
+    public Author save(Author author) {
+        findAuthorByName(author.getName())
+                .ifPresent((ignore) -> {
+                    throw new AuthorAlreadyExistsException();
+                });
+        return repository.save(author);
     }
 }
