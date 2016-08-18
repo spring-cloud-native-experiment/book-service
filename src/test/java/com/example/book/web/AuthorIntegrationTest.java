@@ -3,6 +3,7 @@ package com.example.book.web;
 import com.example.book.domain.Book;
 import com.example.book.exception.AuthorNotFoundException;
 import com.example.book.service.BookService;
+import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @RunWith(SpringRunner.class)
@@ -98,10 +100,28 @@ public class AuthorIntegrationTest {
                 get("/authors/{id}/books").
                 then().
                 statusCode(is(200)).
-                log().all().
                 body(
                         "[0].id", is(1),
                         "[0].name", is("Test")
+                )
+        ;
+    }
+
+    @Test
+    public void addsNewAuthor() throws Exception {
+        given().
+                port(localServerPort).
+                contentType(ContentType.JSON).
+                content("{\"name\": \"test\"}").
+                when().
+                post("/authors").
+                then().
+                log().all().
+                statusCode(is(201)).
+                header("Location", is(notNullValue())).
+                body(
+                        "id", is(notNullValue()),
+                        "name", is("test")
                 )
         ;
     }

@@ -6,17 +6,21 @@ import com.example.book.exception.AuthorNotFoundException;
 import com.example.book.service.AuthorService;
 import com.example.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
+import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 
 @RestController
 @RequestMapping("/authors")
@@ -31,18 +35,18 @@ class AuthorController {
         this.bookService = bookService;
     }
 
-    @RequestMapping(method = GET)
+    @GetMapping
     List<Author> getAllAuthors() {
         return authorService.findAllAuthors();
     }
 
-    @RequestMapping(path = "/{authorId}", method = GET)
+    @GetMapping(path = "/{authorId}")
     Author getAuthorById(@PathVariable Long authorId) {
         return authorService.findAuthorByAuthorId(authorId)
                 .orElseThrow(AuthorNotFoundException::new);
     }
 
-    @RequestMapping(path = "/{authorId}/books", method = GET)
+    @GetMapping(path = "/{authorId}/books")
     List<Book> getBooksForAuthor(@PathVariable Long authorId) {
         return authorService.findAuthorByAuthorId(authorId)
                 .map(Author::getId)
@@ -51,9 +55,13 @@ class AuthorController {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(path = "/author", method = POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    Author save(@RequestBody Author author) {
-        return authorService.save(author);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Author> save(@RequestBody Author author) {
+        Author savedAuthor = authorService.save(author);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .location(fromPath("/authors/{id}")
+                        .buildAndExpand(savedAuthor.getId()).toUri())
+                .body(savedAuthor);
     }
 }
