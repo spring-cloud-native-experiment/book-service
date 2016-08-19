@@ -60,8 +60,10 @@ class AuthorController {
         Author savedAuthor = authorService.save(author);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .location(fromPath("/authors/{id}")
-                        .buildAndExpand(savedAuthor.getId()).toUri())
+                .location(MvcUriComponentsBuilder
+                        .fromMethodCall(on(AuthorController.class)
+                                .getAuthorById(savedAuthor.getId()))
+                        .build().toUri())
                 .body(savedAuthor);
     }
 }
