@@ -1,26 +1,18 @@
-package com.example.book.web;
+package com.example.author;
 
-import com.example.book.domain.Author;
-import com.example.book.domain.Book;
-import com.example.book.exception.AuthorNotFoundException;
-import com.example.book.service.AuthorService;
-import com.example.book.service.BookService;
+import com.example.book.Book;
+import com.example.book.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
-import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 
 @RestController
 @RequestMapping("/authors")

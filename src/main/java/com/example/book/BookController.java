@@ -1,10 +1,7 @@
-package com.example.book.web;
+package com.example.book;
 
-import com.example.book.domain.Author;
-import com.example.book.domain.Book;
-import com.example.book.exception.BookNotFoundException;
-import com.example.book.service.AuthorService;
-import com.example.book.service.BookService;
+import com.example.author.Author;
+import com.example.author.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;

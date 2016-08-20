@@ -1,9 +1,8 @@
-package com.example.book.web;
+package com.example.book;
 
-import com.example.book.domain.Book;
-import com.example.book.exception.AuthorNotFoundException;
-import com.example.book.service.BookService;
-import com.jayway.restassured.http.ContentType;
+import com.example.author.Author;
+import com.example.book.BookNotFoundException;
+import com.example.author.AuthorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -18,34 +17,33 @@ import java.util.stream.Stream;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
-public class AuthorIntegrationTest {
+public class BookIntegrationTest {
 
     @LocalServerPort
     private int localServerPort;
 
     @MockBean
-    private BookService bookService;
+    private AuthorService authorService;
 
     @Test
     @Sql(scripts = "/integrationTestData.sql")
     @Sql(scripts = "/cleanUp.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    public void findsAllAuthors() throws Exception {
+    public void findsAllBooks() throws Exception {
         given().
                 port(localServerPort).
                 when().
-                get("/authors").
+                get("/books").
                 then().
                 statusCode(200).
                 body(
-                        "[0].name", is("John"),
+                        "[0].name", is("C++"),
                         "[0].id", is(1),
-                        "[1].name", is("Doe"),
+                        "[1].name", is("Java"),
                         "[1].id", is(2)
                 )
         ;
@@ -54,33 +52,33 @@ public class AuthorIntegrationTest {
     @Test
     @Sql(scripts = "/integrationTestData.sql")
     @Sql(scripts = "/cleanUp.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    public void findsAuthorById() throws Exception {
+    public void findsBookById() throws Exception {
         given().
                 port(localServerPort).
                 pathParam("id", 1).
                 when().
-                get("/authors/{id}").
+                get("/books/{id}").
                 then().
                 statusCode(is(200)).
                 body(
                         "id", is(1),
-                        "name", is("John")
+                        "name", is("C++")
                 )
         ;
     }
 
     @Test
-    public void shouldThrow404IfAuthorNotFound() throws Exception {
+    public void shouldThrow404IfBookNotFound() throws Exception {
         given().
                 port(localServerPort).
                 pathParam("id", 123).
                 when().
-                get("/authors/{id}").
+                get("/books/{id}").
                 then().
                 statusCode(is(404)).
                 body(
-                        "message", is("No such author"),
-                        "exception", is(AuthorNotFoundException.class.getName())
+                        "message", is("No such book"),
+                        "exception", is(BookNotFoundException.class.getName())
                 )
         ;
     }
@@ -88,40 +86,22 @@ public class AuthorIntegrationTest {
     @Test
     @Sql(scripts = "/integrationTestData.sql")
     @Sql(scripts = "/cleanUp.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    public void findBooksForGivenAuthor() throws Exception {
+    public void findAuthorForGivenBook() throws Exception {
 
-        BDDMockito.given(this.bookService.findBooksByAuthorId(1L))
-                .willReturn(Stream.of(Book.builder().name("Test").id(1L).build()));
+        BDDMockito.given(this.authorService.findAuthorsByBookId(1L))
+                .willReturn(Stream.of(Author.builder().name("Test").id(1L).build()));
 
         given().
                 port(localServerPort).
                 pathParam("id", 1).
                 when().
-                get("/authors/{id}/books").
+                get("/books/{id}/authors").
                 then().
                 statusCode(is(200)).
+                log().all().
                 body(
                         "[0].id", is(1),
                         "[0].name", is("Test")
-                )
-        ;
-    }
-
-    @Test
-    public void addsNewAuthor() throws Exception {
-        given().
-                port(localServerPort).
-                contentType(ContentType.JSON).
-                content("{\"name\": \"test\"}").
-                when().
-                post("/authors").
-                then().
-                log().all().
-                statusCode(is(201)).
-                header("Location", is(notNullValue())).
-                body(
-                        "id", is(notNullValue()),
-                        "name", is("test")
                 )
         ;
     }

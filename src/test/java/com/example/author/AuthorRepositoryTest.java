@@ -1,7 +1,8 @@
-package com.example.book.repository;
+package com.example.author;
 
-import com.example.book.domain.Author;
-import com.example.book.domain.Book;
+import com.example.author.Author;
+import com.example.author.AuthorRepository;
+import com.example.book.Book;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

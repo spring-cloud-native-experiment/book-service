@@ -1,9 +1,7 @@
-package com.example.book.service;
+package com.example.book;
 
-import com.example.book.domain.Author;
-import com.example.book.domain.Book;
-import com.example.book.exception.BookAlreadyExistsException;
-import com.example.book.repository.BookRepository;
+import com.example.author.Author;
+import com.example.author.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

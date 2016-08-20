@@ -1,6 +1,5 @@
-package com.example.book.repository;
+package com.example.author;
 
-import com.example.book.domain.Author;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +11,7 @@ import java.util.stream.Stream;
 
 @Repository
 @RefreshScope
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+interface AuthorRepository extends JpaRepository<Author, Long> {
 
     Optional<Author> findById(@Param("id") Long id);
 

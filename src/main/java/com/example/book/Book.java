@@ -1,5 +1,6 @@
-package com.example.book.domain;
+package com.example.book;
 
+import com.example.author.Author;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
