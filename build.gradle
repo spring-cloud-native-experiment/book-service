@@ -1,22 +1,46 @@
 buildscript {
     ext {
         springBootVersion = '1.4.0.RELEASE'
+        asciiDoctorVersion = '1.5.2'
     }
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciiDoctorVersion}")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
+apply plugin: 'org.asciidoctor.convert'
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+    assertjVersion = '3.5.2'
+    restAssuredVersion = '2.9.0'
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    dependsOn test
+}
 
 jar {
     baseName = 'book-service'
     version = '0.0.1-SNAPSHOT'
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -48,10 +72,10 @@ dependencies {
         exclude group: "org.assertj"
     }
     testCompile('org.springframework.boot:spring-boot-test-autoconfigure')
-    testCompile('org.springframework.restdocs:spring-restdocs-restassured')
-    testCompile 'org.assertj:assertj-core:3.5.2'
+    testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
+    testCompile("org.assertj:assertj-core:${assertjVersion}")
+    testCompile("com.jayway.restassured:rest-assured:${restAssuredVersion}")
 }
-
 
 eclipse {
     classpath {
