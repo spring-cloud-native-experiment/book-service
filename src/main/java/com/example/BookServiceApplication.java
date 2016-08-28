@@ -5,8 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
+@EnableResourceServer
 public class BookServiceApplication {
 
     public static void main(String[] args) {
@@ -16,5 +18,6 @@ public class BookServiceApplication {
     @Configuration
     @EnableEurekaClient
     @ConditionalOnProperty("spring.cloud.bootstrap.enabled")
-    static class CloudConfiguration {}
+    static class CloudConfiguration {
+    }
 }
