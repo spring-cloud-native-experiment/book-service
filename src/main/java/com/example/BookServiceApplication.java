@@ -17,7 +17,7 @@ public class BookServiceApplication {
 
     @Configuration
     @EnableEurekaClient
-    @ConditionalOnProperty("spring.cloud.bootstrap.enabled")
+    @ConditionalOnProperty(value = "spring.cloud.bootstrap.enabled", matchIfMissing = true)
     static class CloudConfiguration {
     }
 }
