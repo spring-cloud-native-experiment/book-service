@@ -23,7 +23,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(AuthorController.class)
+@WebMvcTest(value = AuthorController.class, secure = false)
 @AutoConfigureRestDocs("build/generated-snippets")
 public class AuthorDocumentationTest {
 
